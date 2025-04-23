@@ -45,6 +45,7 @@ std::vector<ent*> layers[5];
 std::vector<ent*> entities;
 
 std::vector<tile> sky_tiles;
+std::vector<tile> backround_tiles;
 std::vector<tile> block_tiles;
 
 std::vector<Vector3> collision_pairs_x;
@@ -493,7 +494,7 @@ void load_objects(Json::Value* actual_json,Json::FastWriter* writer) {
 void load_tiles(tson::Map& level,Texture2D* Layer1Texture, Texture2D* Layer2Texture, Texture2D* Layer3Texture) {
 	sky_tiles.clear();
 	block_tiles.clear();
-
+	backround_tiles.clear();
 	Spawn_cords = { level.get<float>("Spawn_x")*4,level.get<float>("Spawn_y")*4 };
 
 
@@ -568,7 +569,7 @@ void load_tiles(tson::Map& level,Texture2D* Layer1Texture, Texture2D* Layer2Text
 				Tile.source = source;
 				Tile.dest = dest;
 				Tile.tileset = t;
-				block_tiles.push_back(Tile);
+				backround_tiles.push_back(Tile);
 
 				//DrawTexturePro(*t, source, dest, { 0,0 }, 0, RAYWHITE);
 
@@ -942,7 +943,7 @@ int main() {
 	Sound theme = overworld_s;
 
 	Rectangle rec = { 500,600,100,100 };
-	SetSoundVolume(star_s, 100);
+	SetSoundVolume(star_s, 10);
 	
 	Font menu_text = LoadFontEx("../assets/Game_font.ttf", 128, 0, 250);
 
@@ -1062,6 +1063,8 @@ int main() {
 
 			}
 			if (m1->get_health() <= 0) {
+				StopSound(star_s);
+				StopSound(theme);
 				if (m1->dead_time > 4) {
 					m1->lives -= 1;
 					layers[0].clear();
@@ -1142,8 +1145,10 @@ int main() {
 				if (!IsSoundPlaying(star_s) && m1->music) {
 					PlaySound(star_s);
 				}
+				
 			}
 			else {
+				StopSound(star_s);
 				switch (level_setting) {
 				case(sky): {
 
@@ -1266,11 +1271,39 @@ int main() {
 				}
 			}
 
+			for (int i = 0; i < backround_tiles.size(); i++) {
+				if (backround_tiles[i].dest.x <= cam.target.x + window_width * 0.8 && backround_tiles[i].dest.x >= cam.target.x - window_width * 0.8) {
+					DrawTexturePro(*backround_tiles[i].tileset, backround_tiles[i].source, backround_tiles[i].dest, { 0,0 }, 0, RAYWHITE);
+				}
+			}
+
+			for (int i = 0; i < layers[1].size(); i++) {
+				if (layers[1][i]->started_cycle) {
+					switch (layers[1][i]->get_type()) {
+					case(item): {
+						layers[1][i]->draw(&items_s, dt);
+						break;
+					}
+					case(plant): {
+						layers[1][i]->draw(&enemies_s, dt);
+						break;
+					}
+					}
+
+				}
+
+			}
+
 			for (int i = 0; i < block_tiles.size(); i++) {
 				if (block_tiles[i].dest.x <= cam.target.x + window_width * 0.8 && block_tiles[i].dest.x >= cam.target.x - window_width * 0.8) {
 					DrawTexturePro(*block_tiles[i].tileset, block_tiles[i].source, block_tiles[i].dest, { 0,0 }, 0, RAYWHITE);
 				}
 			}
+		
+
+		
+
+			
 
 			for (int i = 0; i < layers[2].size(); i++) {
 				if (layers[2][i]->started_cycle) {

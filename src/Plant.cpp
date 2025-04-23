@@ -83,6 +83,7 @@ void Pirahna_Plant::ProcessCollision(collidable* other, float dt) {
 				set_cord(O_pos.x, O_pos.y);
 				still = true;
 			}
+		
 		}
 		break;
 	}

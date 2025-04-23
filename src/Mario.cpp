@@ -181,7 +181,12 @@ Rectangle mario::get_source_rect(float dt,states stat) {
 
 
 		if (in_star && star_frame < 8) {
-			star_frame += 25 * dt;
+			if (inv_timer > 6) {
+				star_frame += 25 * dt;
+			}
+			else {
+				star_frame += 15 * dt;
+			}
 		}
 		else {
 			star_frame = 0;
@@ -1012,8 +1017,14 @@ void mario::ProcessCollision(collidable* other, float dt) {
 		case(plant): {
 			r2 = other->get_HitBox();
 			bool col = DynamicRectVsRect(r, { speed.x * dt,speed.y * dt }, r2, &cp, &cn, &ct, prop_cp, dt);
-			if (col && !is_warping() && !win) {
-				if (!hit.hit) {
+			if (col) {
+				if (in_star) {
+					other->hit.hit = true;
+					other->hit.origin = enemy;
+					other->hit.hit_up = false;
+					other->score_points(1);
+				}
+				else if (!hit.hit && !is_warping() && !win) {
 					hit.hit = true;
 					hit.origin = enemy;
 					hit.hit_up = false;
@@ -1348,7 +1359,7 @@ Vector2 mario::GetPosition() {
 	return get_cord();
 }
 bool mario::is_star() {
-	return in_star;
+	return in_star && inv_timer > 1;
 }
 void mario::reset_coins() {
 	coins = 0;
