@@ -26,6 +26,10 @@ void Bowser::acc(float dt) {
 	else {
 		set_speedy(MAX_SPEED * 2);
 	}
+	if (!started_cycle) {
+		set_speedx(0);
+		set_speedy(0);
+	}
 }
 Bowser::Bowser(Vector2 cord, direc s_dir) : ent(cord, Vector2{ float(50 * s_dir),0 }, Vector2{ 128,128 }, 1,0) {
 	ResetHitboxes();

@@ -25,6 +25,7 @@ Rectangle Block::getHitBox() {
 	return get_rect();
 }
 void Block::acc(float dt) {
+
 	if (is_dynamic() && B_T < platform) {
 		if (get_speed().y < MAX_SPEED * 2) {
 			set_speedy(get_speed().y + 1800 * dt);
@@ -32,6 +33,11 @@ void Block::acc(float dt) {
 		else {
 			set_speedy(MAX_SPEED * 5);
 		}
+	}
+
+	if (!started_cycle) {
+		set_speedx(0);
+		set_speedy(0);
 	}
 }
 void Block::update(float dt) {

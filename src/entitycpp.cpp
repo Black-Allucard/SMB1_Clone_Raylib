@@ -2,6 +2,7 @@
 #include "../headers/ent.h"
 
 void ent::move(float dt) {
+
 	coordinates.x += speed.x * dt + carry_speed.x * dt;
 	coordinates.y += speed.y * dt + carry_speed.y * dt;
 	set_rect(coordinates.x, coordinates.y, get_rect().width, get_rect().height);

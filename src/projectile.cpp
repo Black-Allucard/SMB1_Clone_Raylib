@@ -20,4 +20,8 @@ void Projectile::acc(float dt) {
 	else {
 		set_speedy(MAX_SPEED * 6);
 	}
+	if (!started_cycle) {
+		set_speedx(0);
+		set_speedy(0);
+	}
 }

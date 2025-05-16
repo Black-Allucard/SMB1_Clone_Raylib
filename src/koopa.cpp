@@ -29,6 +29,10 @@ void koopa::acc(float dt) {
 	else {
 		set_speedy(100 * fly_dir);
 	}
+	if (!started_cycle) {
+		set_speedx(0);
+		set_speedy(0);
+	}
 }
 bool koopa::is_dead() {
 	if (dead_time <= 0) {
@@ -122,7 +126,7 @@ void koopa::ProcessCollision(collidable* other, float dt) {
 			break;
 		}
 		case(enemy): {
-			if (col && other->started_cycle) {
+			if (col && other->get_health() > 0) {
 				float remainingtime = 1.0f - ct;
 				if (AABB(r, r2) && fabsf(remainingtime) > 1) {
 					Resolve_AABB(&r, &r2, &cp, &cn);
@@ -142,9 +146,13 @@ void koopa::ProcessCollision(collidable* other, float dt) {
 		
 
 				if (squashed && get_speed().x != 0) {
+					printf("hit\n");
 					other->hit.hit = true;
 					other->hit.origin = enemy;
 					streak++;
+					if (!other->started_cycle) {
+						other->started_cycle = true;
+					}
 					score_points(streak);
 					hit.hit = false;
 					hit.hit_up = false;

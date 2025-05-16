@@ -23,6 +23,10 @@ void Item::acc(float dt) {
 			set_speedy(MAX_SPEED * 5);
 		}
 	}
+	if (!started_cycle) {
+		set_speedx(0);
+		set_speedy(0);
+	}
 	
 }
 void Item::update(float dt) {
@@ -88,7 +92,7 @@ void Item::ProcessCollision(collidable* other, float dt) {
 			   bool col = DynamicRectVsRect(r, {speed.x*dt,speed.y*dt}, r2, &cp, &cn, &ct, prop_cp, dt);
 			
 			
-			   if (col && I_T != coin) {
+			   if (col && I_T != coin && !(other->transparent && (r.y + r.height / 2 - (r2.y - r2.height / 2) >= 5 || cn.y != -1))) {
 				   float remainingtime = 1 - ct;
 				   if (AABB(r, r2) && fabsf(remainingtime) > 1) {
 					   Resolve_AABB(&r, &r2, &cp, &cn);

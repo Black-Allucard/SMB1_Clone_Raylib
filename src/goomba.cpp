@@ -33,6 +33,10 @@ void goomba::acc(float dt) {
 	else {
 		set_speedy(MAX_SPEED * 5);
 	}
+	if (!started_cycle) {
+		set_speedx(0);
+		set_speedy(0);
+	}
 }
 void goomba::squash(){
 	squashed = true;
@@ -188,6 +192,9 @@ void goomba::ProcessCollision(collidable* other,float dt) {
 					
 
 					set_speedx(fabsf(get_speed().x) * cn.x);
+					if (other->started_cycle) {
+						other->set_speedx(fabsf(other->get_speed().x) * -1 * cn.x);
+					}
 					
 				}
 				if (cn.y != 0 ) {

@@ -1355,7 +1355,7 @@ int main() {
 
 					}
 					else {
-						if (entities[index1]->started_cycle && entities[index2]->started_cycle) {
+						if (entities[index1]->started_cycle || entities[index2]->started_cycle) {
 
 							entities[index1]->ProcessCollision(entities[index2], dt);
 							entities[index2]->ProcessCollision(entities[index1], dt);
