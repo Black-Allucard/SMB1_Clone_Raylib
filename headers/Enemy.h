@@ -14,7 +14,6 @@ enum enemies {
 };
 class Enemy:public ent {
 public :
-	bool squashed = false;
 	bool can_squash;
 	bool can_hit = true;
 	bool is_flying = false;

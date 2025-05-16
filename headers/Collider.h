@@ -133,7 +133,7 @@ public:
 	Vector2 carry_speed = { 0,0 };
 
 	// used by player and enemies
-
+	bool squashed = false;
 	int streak = 0; 
 	bool player__col = false ;
 

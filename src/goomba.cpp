@@ -192,7 +192,7 @@ void goomba::ProcessCollision(collidable* other,float dt) {
 					
 
 					set_speedx(fabsf(get_speed().x) * cn.x);
-					if (other->started_cycle) {
+					if (other->started_cycle && !other->squashed) {
 						other->set_speedx(fabsf(other->get_speed().x) * -1 * cn.x);
 					}
 					
